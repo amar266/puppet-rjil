@@ -7,3 +7,4 @@ contrail::vrouter::vgw_subnets: "%{hiera('rjil::neutron::contrail::public_cidr')
 contrail::vrouter::dest_net: 0.0.0.0/0
 contrail::vrouter::vrf: 'default-domain:services:public:public'
 rjil::test::contrail_vrouter::vgw_enabled: "%{hiera('contrail::vrouter::vgw_enabled')}"
+rjil::debug_timeout::debug_files: "/var/log/syslog:6000 /var/log/cloud-init.log:6000"

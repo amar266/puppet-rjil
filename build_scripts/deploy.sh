@@ -24,7 +24,7 @@ time $timeout 1200 bash -c 'while ! bash -c "ip=$(python -m jiocloud.utils get_i
 ip=$(python -m jiocloud.utils get_ip_of_node ${consul_bootstrap_node:-bootstrap1}_${project_tag})
 
 function debug(){
-  bash -c "ssh -o ServerAliveInterval=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${ssh_user:-jenkins}@${ip} python -m jiocloud.orchestrate debug_timeout ${BUILD_NUMBER};python -m jiocloud.apply_resources ssh_config --project_tag=${project_tag} ${mappings_arg} environment/${layout}.yaml > ${project_tag}_ssh_config;for i in \`python -m jiocloud.apply_resources list --project_tag=${project_tag} environment/${layout}.yaml \`; do ssh -F ${project_tag}_ssh_config \${i} \'hostname\' ;done;"
+  bash -c "ssh -o ServerAliveInterval=30 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${ssh_user:-jenkins}@${ip} python -m jiocloud.orchestrate debug_timeout ${BUILD_NUMBER};python -m jiocloud.apply_resources ssh_config --project_tag=${project_tag} ${mappings_arg} environment/${layout}.yaml > ${project_tag}_ssh_config;for i in \`python -m jiocloud.apply_resources list --project_tag=${project_tag} environment/${layout}.yaml \`; do ssh -F ${project_tag}_ssh_config \${i} python -m jiocloud.orchestrate debug_timeout ${BUILD_NUMBER} --debug_hosts;done;"
 
 }
 
