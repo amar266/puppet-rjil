@@ -53,7 +53,7 @@ describe 'rjil::neutron::contrail' do
         'cidr'         => '1.1.1.0/24',
         'network_name' => 'public'
       })
-      should contain_contrail_rt('default-domain:services:public').with({
+      should contain_contrail_rt('default-domain:default-project:public').with({
         'ensure'             => 'present',
         'rt_number'          => 10000,
         'router_asn'         => 64512,

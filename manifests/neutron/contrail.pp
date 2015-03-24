@@ -44,7 +44,7 @@ class rjil::neutron::contrail(
   ##
   # Add route target in contrail config database.
   ##
-  contrail_rt {"default-domain:services:${public_network_name}":
+  contrail_rt {"default-domain:default-project:${public_network_name}":
     ensure             => present,
     rt_number          => $public_rt_number,
     router_asn         => $router_asn,
@@ -55,7 +55,7 @@ class rjil::neutron::contrail(
 
   consul_kv{'neutron/floatingip_pool/status':
     value   => 'ready',
-    require => Contrail_rt["default-domain:services:${public_network_name}"],
+    require => Contrail_rt["default-domain:default-project:${public_network_name}"],
   }
 
   if $public_cidr {
@@ -78,14 +78,14 @@ class rjil::neutron::contrail(
         cidr             => $public_cidr,
         network_name     => $public_network_name,
         allocation_pools => ["start=$public_subnet_ip_start,end=$public_subnet_ip_end"],
-        before           => Contrail_rt["default-domain:services:${public_network_name}"],
+        before           => Contrail_rt["default-domain:default-project:${public_network_name}"],
       }
     } else {
       neutron_subnet {$public_subnet_name:
         ensure       => present,
         cidr         => $public_cidr,
         network_name => $public_network_name,
-        before       => Contrail_rt["default-domain:services:${public_network_name}"],
+        before       => Contrail_rt["default-domain:default-project:${public_network_name}"],
       }
     }
   }
