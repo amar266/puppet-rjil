@@ -36,11 +36,15 @@ class rjil::system::metrics(
     datadir    => '/var/lib/metrics/collectd/csv',
     storerates => false,
   }
-
-  # config for thresholds
-  file { '/etc/collectd/conf.d/20-thresholds.conf':
-    content => template('rjil/collectd/thresholds.conf.erb'),
-    notify => Service['collectd'],
+  rjil::system::define_metrics { 'df':
+    instance   => "percent",
+    warningmin => "60",
+    failuremin => "80",
+    persist    => "True",
+    persistok  => "True",
+    disks      => ['root'],
+    disk_percent_warn => '10',
+    disk_percent_fail => '5',
   }
 
   file { '/etc/collectd/conf.d/20-notifications.conf':
@@ -81,19 +85,7 @@ class rjil::system::metrics(
   # libvirt, vserver
 
   # register a consul service that we can use to send out alerts to
-  rjil::jiocloud::consul::service { 'metric_thresholds':
-    interval     => '120s',
-    tags          => ['metrics'],
-    check_command => '/usr/lib/jiocloud/metrics/check_thresholds.sh',
-  }
 
-  file { '/usr/lib/jiocloud/metrics':
-    ensure => directory,
-  }
-  file { '/usr/lib/jiocloud/metrics/check_thresholds.sh':
-    mode    => '0755',
-    content => template('rjil/tests/check_thresholds.sh.erb')
-  }
   file { '/usr/lib/jiocloud/metrics/check_thresholds.py':
     mode    => '0755',
     source => 'puppet:///modules/rjil/tests/check_thresholds.py'

@@ -818,3 +818,16 @@ tempest::provision::networkname: "%{hiera('tempest::fixed_network_name')}"
 
 apache::trace_enable: 'Off'
 apache::mod::ssl::ssl_cipher: "HIGH:MEDIUM:!aNULL:!MD5:!RC4"
+
+######## consul-alerts settings
+#################################
+rjil::jiocloud::consul::consul_alerts::health_check: "true"
+rjil::jiocloud::consul::consul_alerts::check_thresold: "30"
+rjil::jiocloud::consul::consul_alerts::slack_notifier_enabled: "true"
+rjil::jiocloud::consul::consul_alerts::slack_enabled: "true"
+rjil::jiocloud::consul::consul_alerts::slack_cluster_name: "consul-alerts"
+rjil::jiocloud::consul::consul_alerts::slack_url: "https://hooks.slack.com/services/T0300/B046C4M6Z/bH4CQ8IZU8uu13uWeMgZ8Mww"
+rjil::jiocloud::consul::consul_alerts::slack_username: "WatchBot"
+rjil::jiocloud::consul::consul_alerts::slack_channel: "consul-alerts"
+rjil::jiocloud::consul::consul_alerts::bin_dir: "/usr/local/sbin"
+rjil::jiocloud::consul::consul_alerts::download_url: "https://bintray.com/artifact/download/darkcrux/generic/consul-alerts-latest-linux-amd64.tar"

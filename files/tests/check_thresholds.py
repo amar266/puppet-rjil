@@ -13,8 +13,7 @@ import sys
 # about those failures and warning to stdout
 #
 class NotificationParser:
-    def parse(self, filename):
-        print filename
+    def parse(self, filename, servicename):
         data_hash = {
           'OKAY':    [],
           'WARNING': [],
@@ -23,21 +22,24 @@ class NotificationParser:
         with open(filename, 'r') as f:
             for line in f:
                 spl_line = line.split(', ')
+                #print spl_line.pop(2)
                 m = re.search('Notification: severity = (OKAY|WARNING|FAILURE)', spl_line.pop(0))
-                if m:
-                    local_data = {}
-                    for l in spl_line:
-                        # assumes that message is the last field, so it we have
-                        # encountered it, then all remaining text should be
-                        # considered part of the message
-                        if 'message' in local_data:
-                            local_data['message']+=l
-                        else:
-                            data = l.split(' = ', 2)
-                            local_data[data[0]] = data[1]
-                    data_hash[m.group(1)].append(local_data)
-                #else:
-                #    print "Line %s did not match expected output line" % line
+                n = spl_line[1].split(' = ')
+                if n[1] == servicename:
+                  if m:
+                      local_data = {}
+                      for l in spl_line:
+                          # assumes that message is the last field, so it we have
+                          # encountered it, then all remaining text should be
+                          # considered part of the message
+                          if 'message' in local_data:
+                              local_data['message']+=l
+                          else:
+                              data = l.split(' = ', 2)
+                              local_data[data[0]] = data[1]
+                      data_hash[m.group(1)].append(local_data)
+                  #else:
+                  #    print "Line %s did not match expected output line" % line
         f.close()
         return self.dedup(data_hash)
 
@@ -63,9 +65,10 @@ class NotificationParser:
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--filename', help='Notification file to parse')
+    argparser.add_argument('--servicename', help='Notification file to parse')
     args = argparser.parse_args()
     notification_parser = NotificationParser()
-    data = notification_parser.parse(args.filename)
+    data = notification_parser.parse(args.filename, args.servicename)
     if len(data['FAILURE']) > 0:
         print data
         sys.exit(2)

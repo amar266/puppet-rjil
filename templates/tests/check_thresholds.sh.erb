@@ -8,4 +8,4 @@ new_file=/tmp/`basename <%= @log_file %>``date +%Y%m%d%H%M%S`
 
 sudo mv <%= @log_file %> $new_file
 
-python /usr/lib/jiocloud/metrics/check_thresholds.py --filename $new_file
+python /usr/lib/jiocloud/metrics/check_thresholds.py --filename $new_file --servicename <%= @name %>

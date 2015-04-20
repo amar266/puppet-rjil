@@ -18,15 +18,7 @@ describe 'rjil::system::metrics' do
         'datadir'    => '/var/lib/metrics/collectd/csv',
         'storerates' => false,
       })
-      should contain_class('collectd::plugin::users')
-      should contain_class('collectd::plugin::conntrack')
-      should contain_class('collectd::plugin::cpu')
       should contain_class('collectd::plugin::memory')
-      should contain_class('collectd::plugin::ntpd')
-      should contain_class('collectd::plugin::libvirt').with({
-        'connection'       => 'qemu:///system',
-        'interface_format' => 'address',
-      })
-    end
+      end
   end
 end
