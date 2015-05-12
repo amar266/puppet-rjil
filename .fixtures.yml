@@ -143,3 +143,6 @@ fixtures:
     logrotate:
       repo: https://github.com/rodjek/puppet-logrotate
       ref: 89ee645e2350045be48df7ac3ef86cbe4cd9b096
+    collectd:
+      repo: https://github.com/pdxcat/puppet-module-collectd
+      ref: v3.2.0
