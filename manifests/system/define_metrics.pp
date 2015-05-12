@@ -14,4 +14,13 @@ define rjil::system::define_metrics(
       content => template("rjil/collectd/thresholds-$name.conf.erb"),
       notify => Service['collectd'],
   }
+  rjil::jiocloud::consul::service { "metric_thresholds_$name":
+    interval     => '120s',
+    tags          => ['metrics'],
+    check_command => "/usr/lib/jiocloud/metrics/check_thresholds_$name.sh",
+  }
+  file { "/usr/lib/jiocloud/metrics/check_thresholds_$name.sh":
+    mode    => '0755',
+    content => template('rjil/tests/check_thresholds.sh.erb')
+  }
 }
