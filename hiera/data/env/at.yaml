@@ -4,6 +4,8 @@ rjil::ceph::osd::autogenerate: true
 rjil::ceph::osd::autodisk_size: 10
 rjil::ceph::osd::osd_journal_size: 2
 
+rjil::jiocloud::consul::consul_alerts::health_check: "true"
+
 # Only Qemu is supported on virtual testing environment
 nova::compute::libvirt::libvirt_virt_type: qemu
 

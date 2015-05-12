@@ -1,0 +1,11 @@
+description "Consul Alert"
+start on (local-filesystems and net-device-up IFACE!=lo)
+stop on runlevel [06]
+
+env CONSUL_ALERTS=<%= @bin_dir %>/consul-alerts
+
+exec sudo -u consul -g consul $CONSUL_ALERTS start --watch-events --watch-checks --consul-dc <%= @consul_discovery_token %>
+
+respawn
+respawn limit 10 10
+kill timeout 10
