@@ -13,6 +13,7 @@ class rjil::db (
   $mysql_data_disk = undef,
   $dbs = {},
   $bind_address = '0.0.0.0',
+  $readonly_password = "testpass",
 )  {
 
 
@@ -121,6 +122,21 @@ class rjil::db (
     user       => "monitor@${user_address}",
     table      => '*.*',
     require    => Mysql_user["monitor@${user_address}"],
+  }
+
+  mysql_user { "transmog@${user_address}":
+    ensure        => 'present',
+    password_hash => mysql_password("${readonly_password}"),
+    require       => File['/root/.my.cnf'],
+  }
+
+  mysql_grant { "transmog@${user_address}/*.*":
+    ensure     => 'present',
+    options    => ['GRANT'],
+    privileges => ['SELECT'],
+    user       => "transmog@${user_address}",
+    table      => '*.*',
+    require    => Mysql_user["transmog@${user_address}"],
   }
 
   rjil::jiocloud::consul::service { "mysql":
